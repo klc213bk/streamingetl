@@ -18,7 +18,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 	<!-- Imports default Ignite configuration -->
-	<import resource="example-default.xml" />
+	<import resource="ignite-parent.xml" />
 
 	<bean parent="ignite.cfg">
 		<!-- Explicitly configure TCP discovery SPI to provide list of initial nodes. -->
