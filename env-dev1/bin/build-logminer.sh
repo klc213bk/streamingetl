@@ -3,9 +3,6 @@
 LOGMINER_HOME=/home/oracle/gitrepository/kafka-connect-oracle
 STREAMINGETL_HOME=/home/oracle/gitrepository/transglobe/streamingetl
 
-#LOGMINER_HOME=/home/feib/gitrepository/kafka-connect-oracle
-#STREAMINGETL_HOME=/home/feib/gitrepository/transglobe/streamingetl
-
 cd ${LOGMINER_HOME}
 mvn clean install
 
