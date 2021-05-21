@@ -1,8 +1,12 @@
 # streamingetl
 Deployment
-1. deploy kafka server, ignite server
-2. run create-kafka-topics.sh
-
+1. stored procedure LOGMINER_NOARCHIVE_SP is installed
+2. deploy kafka server, ignite server, and config
+3. run create-kafka-topics.sh
+4. config logminer_connect_standardalone.properties and ORacleSourceConnector.properties
+5. config consumer config.properties
+6. config load properties
+7. config spring-boot properties
 
 
 #Kafka 
