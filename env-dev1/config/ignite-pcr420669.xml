@@ -21,7 +21,7 @@
 	<import resource="ignite-parent.xml" />
 
 	<bean parent="ignite.cfg">
-	    <property name="workDirectory" value="/home/oracle/gitrepository/transglobe/streamingetl-pcr420669/work"/>
+	    <property name="workDirectory" value="/home/steven/gitrepo/transglobe/streamingetl-pcr420669/work"/>
 		<property name="dataStorageConfiguration">
 			<bean class="org.apache.ignite.configuration.DataStorageConfiguration">
 				<property name="walMode" value="NONE"/>
