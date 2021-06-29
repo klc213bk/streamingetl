@@ -1,12 +1,18 @@
 # streamingetl
 #Sart seq
 1. start zookeper
+  1.1 ./start-kafka-zookeeper.sh
 2. start kafkaserver
+  2.1 copy ojdbc8-12.2.0.1.jar, jsqlparser-1.2 to {kafka installation}/libs
+  2.2 ./start-kafka-server.sh
 3. start ignite server
+  3.1 ./start-ignite-pcr420669.sh
 (run initialload)
+   ./start-initialload.sh
 4. start springboot server
 5. start consumer
 6. start logminer
+  6.1 ./start-logminer.sh
 
 Deployment
 1. stored procedure LOGMINER_NOARCHIVE_SP is installed
