@@ -11,6 +11,7 @@
    ./start-initialload.sh
 4. start springboot server
 5. start consumer
+  5.1 ./start-consumer.sh
 6. start logminer
   6.1 ./start-logminer.sh
 
