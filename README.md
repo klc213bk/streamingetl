@@ -18,6 +18,18 @@ Deployment
 7. config spring-boot properties
 
 # To add supplementa logging
+## 至少supplemental_log_data_min is enabled
+SQL> select supplemental_log_data_min, supplemental_log_data_pk, supplemental_log_data_all from v$database;
+if no, add supplemental_log_data_min
+SQL> ALTER DATABASE ADD SUPPLEMENTAL LOG DATA;
+
+## check if table-level logging
+SQL>   select *
+FROM DBA_LOG_GROUPS
+where TABLE_NAME in('T_CONTRACT_BENE','T_INSURED_LIST','T_POLICY_HOLDER','T_POLICY_HOLDER_LOG','T_CONTRACT_BENE_LOG','T_INSURED_LIST_LOG','T_POLICY_HOLDER_LOG','T_ADDRESS');
+
+
+
 SQL> ALTER TABLE LS_EBAO.T_POLICY_HOLDER ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
 SQL> ALTER TABLE LS_EBAO.T_INSURED_LIST ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
 SQL> ALTER TABLE LS_EBAO.T_CONTRACT_BENE ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
@@ -31,6 +43,9 @@ SQL> ALTER TABLE LS_EBAO.T_STREAMING_ETL_HEALTH_CDC ADD SUPPLEMENTAL LOG DATA(AL
 SQL> ALTER TABLE LS_EBAO.T_CONTRACT_BENE DROP SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
 
 
+SQL> select current_scn from v$database;
+
+
 
 #Kafka 
 # clean up kafka topic
@@ -40,7 +55,7 @@ rmdir C:\tmp\zookeeper
 
 # list topic
 $ ./bin/kafka-topics.sh --zookeeper localhost:2181 --list
-$ ./bin/kafka-topics.bat --bootstrap-server localhost:9092 --list
+$ ./bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
 
 # topic name
 ebao.cdc.[tablename].0
@@ -73,6 +88,8 @@ ebao.cdc.test_t_address.0
 delete dirs:
 C:\tmp\kafka-logs\{topicname-0}
 
+# console consumer
+./bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --from-beginning --topic [topic namem]
 
 # Ignite
 ./bin/sqlline.sh --verbose=true -u jdbc:ignite:thin://127.0.0.1:10850/
