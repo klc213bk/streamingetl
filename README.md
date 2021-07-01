@@ -14,6 +14,8 @@
   5.1 ./start-consumer.sh
 6. start logminer
   6.1 ./start-logminer.sh
+7. start health-check
+  7.1 ./start-healthcheck.sh   
 
 Deployment
 1. stored procedure LOGMINER_NOARCHIVE_SP is installed

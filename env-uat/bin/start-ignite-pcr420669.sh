@@ -1,7 +1,7 @@
 #!/bin/bash
 
 IGNITE_HOME=/home/kafka/apache-ignite-2.9.1-bin
-APP_HOME=/home/kafka/streamingetl/env-uat
+STREAMINGETL_HOME=/home/kafka/streamingetl
 
-${IGNITE_HOME}/bin/ignite.sh ${APP_HOME}/config/ignite-pcr420669.xml
+${IGNITE_HOME}/bin/ignite.sh ${STREAMINGETL_HOME}/env-uat/config/ignite-pcr420669.xml
 

@@ -1,5 +1,5 @@
 #!/bin/bash
 
-HEALTH_HOME=/home/steven/gitrepo/transglobe/streamingetl-common
+STREAMINGETL_HOME=/home/steven/gitrepo/transglobe/streamingetl
 
-java -cp "${HEALTH_HOME}/target/streamingetl-common-1.0.jar:${HEALTH_HOME}/lib/*" -Dprofile.active=env-dev1 com.transglobe.streamingetl.common.app.HealthCheckApp
+java -cp "${STREAMINGETL_HOME}/lib/streamingetl-common-1.0.jar:${STREAMINGETL_HOME}/lib/*" -Dprofile.active=env-dev1 com.transglobe.streamingetl.common.app.HealthCheckApp
