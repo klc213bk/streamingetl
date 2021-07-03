@@ -5,6 +5,7 @@
 2. start kafkaserver
   2.1 copy ojdbc8-12.2.0.1.jar, jsqlparser-1.2 to {kafka installation}/libs
   2.2 ./start-kafka-server.sh
+  (run create-kafka-topics.sh for the first time )
 3. start ignite server
   3.1 ./start-ignite-pcr420669.sh
 (run initialload)
@@ -19,6 +20,7 @@
 
 Deployment
 1. stored procedure LOGMINER_NOARCHIVE_SP is installed
+1.1 new table tgliner.T_STREAMING-ETL-HEALTH_CDC
 2. deploy kafka server, ignite server, and config
 3. run create-kafka-topics.sh
 4. config logminer_connect_standardalone.properties and ORacleSourceConnector.properties
@@ -37,7 +39,8 @@ SQL>   select *
 FROM DBA_LOG_GROUPS
 where TABLE_NAME in('T_CONTRACT_BENE','T_INSURED_LIST','T_POLICY_HOLDER','T_POLICY_HOLDER_LOG','T_CONTRACT_BENE_LOG','T_INSURED_LIST_LOG','T_POLICY_HOLDER_LOG','T_ADDRESS');
 
-
+## current scn 
+SQL> select current_scn from v$database;
 
 SQL> ALTER TABLE LS_EBAO.T_POLICY_HOLDER ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
 SQL> ALTER TABLE LS_EBAO.T_INSURED_LIST ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
@@ -46,7 +49,8 @@ SQL> ALTER TABLE LS_EBAO.T_POLICY_HOLDER_LOG ADD SUPPLEMENTAL LOG DATA(ALL) COLU
 SQL> ALTER TABLE LS_EBAO.T_INSURED_LIST_LOG ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
 SQL> ALTER TABLE LS_EBAO.T_CONTRACT_BENE_LOG ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
 SQL> ALTER TABLE LS_EBAO.T_ADDRESS ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
-SQL> ALTER TABLE LS_EBAO.T_STREAMING_ETL_HEALTH_CDC ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
+
+SQL> ALTER TABLE TGLMINER.T_STREAMING_ETL_HEALTH_CDC ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
 
 # To drop supplementa logging
 SQL> ALTER TABLE LS_EBAO.T_CONTRACT_BENE DROP SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
