@@ -1,7 +1,7 @@
 #!/bin/bash
 
 KAFKA_HOME=/home/feib/kafka_2.13-2.7.0
-APP_HOME=/home/feib/gitrepository/transglobe/streamingetl/env-dev2
+STREAMINGETL_HOME=/home/feib/gitrepository/transglobe/streamingetl
 
-${KAFKA_HOME}/bin/connect-standalone.sh ${APP_HOME}/config/logminer_connect-standalone.properties ${APP_HOME}/config/OracleSourceConnector.properties
+${KAFKA_HOME}/bin/connect-standalone.sh ${STREAMINGETL_HOME}/env-dev2/config/logminer_connect-standalone.properties ${STREAMINGETL_HOME}/env-dev2/config/OracleSourceConnector.properties
 
