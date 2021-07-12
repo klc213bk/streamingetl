@@ -19,41 +19,91 @@
   7.1 ./start-healthcheck.sh   
 
 Deployment
-1. stored procedure LOGMINER_NOARCHIVE_SP is installed
-1.1 new table tgliner.T_STREAMING-ETL-HEALTH_CDC
-2. deploy kafka server, ignite server, and config
-3. run create-kafka-topics.sh
-4. config logminer_connect_standardalone.properties and ORacleSourceConnector.properties
-5. config consumer config.properties
-6. config load properties
-7. config spring-boot properties
+1. enable supplemental log & create logminer user
+	Reference LogminerSetup.txt
+2. new DB objects
+	1.1	logon as tglminer and create stored procedure 'LOGMINER_NOARCHIVE_SP'
+		file: LOGMINER_NOARCHIVE_SP.sql
+	1.2 new table TGLMINER.T_STREAMING-ETL-HEALTH_CDC
+		1.2.1	create table T_STREAMING_ETL_HEALTH_CDC
+			(
+				cdc_time NUMBER(19, 0),
+				primary key (cdc_time)
+			);
+	 
+		1.2.2	
+			SQL> ALTER TABLE TGLMINER.T_STREAMING_ETL_HEALTH_CDC ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
+		
+3. # To add supplementa logging
+	## 至少supplemental_log_data_min is enabled
+	SQL> select supplemental_log_data_min, supplemental_log_data_pk, supplemental_log_data_all from v$database;
+	if no, add supplemental_log_data_min
+	SQL> ALTER DATABASE ADD SUPPLEMENTAL LOG DATA;
+	
+	## check if table-level logging
+	SQL>   select *
+	FROM DBA_LOG_GROUPS
+	where TABLE_NAME in('T_CONTRACT_BENE','T_INSURED_LIST','T_POLICY_HOLDER','T_POLICY_HOLDER_LOG','T_CONTRACT_BENE_LOG','T_INSURED_LIST_LOG','T_POLICY_HOLDER_LOG','T_ADDRESS');
+	
+	## current scn 
+	SQL> select current_scn from v$database;
+	
+	SQL> ALTER TABLE LS_EBAO.T_CONTRACT_PRODUCT_LOG ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
+	SQL> ALTER TABLE LS_EBAO.T_PRODUCTION_DETAIL ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
+	SQL> ALTER TABLE LS_EBAO.T_IMAGE ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
+	SQL> ALTER TABLE LS_EBAO.T_CONTRACT_EXTEND_CX ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
+	SQL> ALTER TABLE LS_EBAO.T_POLICY_CHANGE ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
+	SQL> ALTER TABLE LS_EBAO.T_COMMISION_FEE ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
+	SQL> ALTER TABLE LS_EBAO.T_POLICY_PRINT_JOB ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
+	SQL> ALTER TABLE LS_EBAO.T_PRODUCT_COMMISION ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
+	SQL> ALTER TABLE LS_EBAO.T_CONTRACT_EXTEND_LOG ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
+	SQL> ALTER TABLE LS_EBAO.JBPM_VARIABLEINSTANCE ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
+	SQL> ALTER TABLE LS_EBAO.T_POLICY_HOLDER ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
+	SQL> ALTER TABLE LS_EBAO.T_INSURED_LIST ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
+	SQL> ALTER TABLE LS_EBAO.T_CONTRACT_BENE ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
+	SQL> ALTER TABLE LS_EBAO.T_POLICY_HOLDER_LOG ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
+	SQL> ALTER TABLE LS_EBAO.T_INSURED_LIST_LOG ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
+	SQL> ALTER TABLE LS_EBAO.T_CONTRACT_BENE_LOG ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
+	SQL> ALTER TABLE LS_EBAO.T_ADDRESS ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
+	
+	# To drop supplementa logging
+	SQL> ALTER TABLE LS_EBAO.T_CONTRACT_BENE DROP SUPPLEMENTAL LOG DATA(ALL) COLUMNS;		
 
-# To add supplementa logging
-## 至少supplemental_log_data_min is enabled
-SQL> select supplemental_log_data_min, supplemental_log_data_pk, supplemental_log_data_all from v$database;
-if no, add supplemental_log_data_min
-SQL> ALTER DATABASE ADD SUPPLEMENTAL LOG DATA;
+3. 
+	# list topic
+		$ ./bin/kafka-topics.sh --zookeeper localhost:2181 --list
+		$ ./bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
+		
+	#create topic
+		./bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic [topic name]
+	
+		# topic name
+		ebao.cdc.[tablename].0
+		
+		# topics for tglminer
+		ebao.cdc.t_streaming_etl_health.0
+		
+		# topics for PCR420669 
+		ebao.cdc.t_policy_holder.0
+		ebao.cdc.t_insured_list.0
+		ebao.cdc.t_contract_bene.0
+		ebao.cdc.t_policy_holder_log.0
+		ebao.cdc.t_insured_list_log.0
+		ebao.cdc.t_contract_bene_log.0
+		ebao.cdc.t_address.0
+	
+	#delete topic
+		./bin/kafka-topics.sh --delete --bootstrap-server localhost:9092  --topic [topic name]
 
-## check if table-level logging
-SQL>   select *
-FROM DBA_LOG_GROUPS
-where TABLE_NAME in('T_CONTRACT_BENE','T_INSURED_LIST','T_POLICY_HOLDER','T_POLICY_HOLDER_LOG','T_CONTRACT_BENE_LOG','T_INSURED_LIST_LOG','T_POLICY_HOLDER_LOG','T_ADDRESS');
 
-## current scn 
-SQL> select current_scn from v$database;
+4. deploy kafka server, ignite server, and config
+5. run create-kafka-topics.sh
+6. config logminer_connect_standardalone.properties and ORacleSourceConnector.properties
+7. config consumer config.properties
+8. config load properties
+9. config spring-boot properties
 
-SQL> ALTER TABLE LS_EBAO.T_POLICY_HOLDER ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
-SQL> ALTER TABLE LS_EBAO.T_INSURED_LIST ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
-SQL> ALTER TABLE LS_EBAO.T_CONTRACT_BENE ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
-SQL> ALTER TABLE LS_EBAO.T_POLICY_HOLDER_LOG ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
-SQL> ALTER TABLE LS_EBAO.T_INSURED_LIST_LOG ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
-SQL> ALTER TABLE LS_EBAO.T_CONTRACT_BENE_LOG ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
-SQL> ALTER TABLE LS_EBAO.T_ADDRESS ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
 
-SQL> ALTER TABLE TGLMINER.T_STREAMING_ETL_HEALTH_CDC ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
-
-# To drop supplementa logging
-SQL> ALTER TABLE LS_EBAO.T_CONTRACT_BENE DROP SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
 
 
 SQL> select current_scn from v$database;
@@ -64,39 +114,6 @@ SQL> select current_scn from v$database;
 # clean up kafka topic
 rmdir C:\tmp\kafka-logs
 rmdir C:\tmp\zookeeper
-
-
-# list topic
-$ ./bin/kafka-topics.sh --zookeeper localhost:2181 --list
-$ ./bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
-
-# topic name
-ebao.cdc.[tablename].0
-
-# topics for PCR420669 
-ebao.cdc.t_policy_holder.0
-ebao.cdc.t_insured_list.0
-ebao.cdc.t_contract_bene.0
-ebao.cdc.t_policy_holder_log.0
-ebao.cdc.t_insured_list_log.0
-ebao.cdc.t_contract_bene_log.0
-ebao.cdc.t_address.0
-
-# topics for PCR420669 test
-ebao.cdc.test_t_policy_holder.0
-ebao.cdc.test_t_insured_list.0
-ebao.cdc.test_t_contract_bene.0
-ebao.cdc.test_t_policy_holder_log.0
-ebao.cdc.test_t_insured_list_log.0
-ebao.cdc.test_t_contract_bene_log.0
-ebao.cdc.test_t_address.0
-
-
-#create topic
-./bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic [topic name]
-
-#delete topic
-./bin/kafka-topics.sh --delete --bootstrap-server localhost:9092  --topic [topic name]
 
 delete dirs:
 C:\tmp\kafka-logs\{topicname-0}

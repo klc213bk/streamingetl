@@ -11,4 +11,4 @@ cd ${KAFKA_HOME}
 ./bin/kafka-topics.sh --zookeeper localhost:2181 --delete --topic ebao.cdc.test_t_insured_list_log.0
 ./bin/kafka-topics.sh --zookeeper localhost:2181 --delete --topic ebao.cdc.test_t_contract_bene_log.0
 ./bin/kafka-topics.sh --zookeeper localhost:2181 --delete --topic ebao.cdc.test_t_address.0
-./bin/kafka-topics.sh --zookeeper localhost:2181 --delete --topic tglminer.cdc.t_streaming_etl_health_cdc.0
+./bin/kafka-topics.sh --zookeeper localhost:2181 --delete --topic ebao.cdc.t_streaming_etl_health_cdc.0
