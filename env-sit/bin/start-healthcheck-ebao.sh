@@ -1,5 +1,5 @@
 #!/bin/bash
 
-APP_HOME=/home/kafka/streamingetl-pcr420669
+STREAMINGETL_HOME=/home/kafka/streamingetl
 
-java -cp "${APP_HOME}/lib/pcr420669-load-1.0.jar:${APP_HOME}/lib/*" -Dprofile.active=env-sit com.transglobe.streamingetl.pcr420669.load.HealthCheckApp
+java -cp "${STREAMINGETL_HOME}/lib/streamingetl-common-1.0.jar:${STREAMINGETL_HOME}/lib/*" -Dprofile.active=env-sit com.transglobe.streamingetl.common.app.HealthCheckApp
