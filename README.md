@@ -1,5 +1,6 @@
 # streamingetl
 #Sart seq
+0. $start-init-streaming.sh 
 1. start zookeper
   1.1 ./start-kafka-zookeeper.sh
 2. start kafkaserver
