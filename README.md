@@ -1,15 +1,34 @@
-# streamingetl
-#Sart seq
-0. first time execute
+########## streamingetl
+# preparation
+1. copy ojdbc8-12.2.0.1.jar, jsqlparser-1.2 to {kafka installation}/libs
+
+#initialization
+1. 
+  1.1 ./start-kafka-zookeeper.sh
+  1.2 ./start-kafka-server.sh
+
+2. create logminer table
 $start-init-streaming.sh 
 
 
-1. start zookeper
-  1.1 ./start-kafka-zookeeper.sh
-2. start kafkaserver
-  2.1 copy ojdbc8-12.2.0.1.jar, jsqlparser-1.2 to {kafka installation}/libs
-  2.2 ./start-kafka-server.sh
-  (run create-kafka-topics.sh for the first time )
+Note:
+# list topic
+		$ ./bin/kafka-topics.sh --zookeeper localhost:2181 --list
+		$ ./bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
+		
+	#create topic
+		./bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic [topic name]
+	
+		# topic name
+		ebao.cdc.[tablename].0
+	
+	#delete topic
+		./bin/kafka-topics.sh --delete --bootstrap-server localhost:9092  --topic [topic name]
+		
+		
+		
+
+ 
 3. start ignite server
   3.1 ./start-ignite-pcr420669.sh
 (run initialload)
@@ -70,18 +89,7 @@ Deployment
 	SQL> ALTER TABLE LS_EBAO.T_CONTRACT_BENE DROP SUPPLEMENTAL LOG DATA(ALL) COLUMNS;		
 
 3. 
-	# list topic
-		$ ./bin/kafka-topics.sh --zookeeper localhost:2181 --list
-		$ ./bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
-		
-	#create topic
-		./bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic [topic name]
 	
-		# topic name
-		ebao.cdc.[tablename].0
-	
-	#delete topic
-		./bin/kafka-topics.sh --delete --bootstrap-server localhost:9092  --topic [topic name]
 
 
 4. deploy kafka server, ignite server, and config
