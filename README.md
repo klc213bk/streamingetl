@@ -1,6 +1,9 @@
 # streamingetl
 #Sart seq
-0. $start-init-streaming.sh 
+0. first time execute
+$start-init-streaming.sh 
+
+
 1. start zookeper
   1.1 ./start-kafka-zookeeper.sh
 2. start kafkaserver
@@ -17,7 +20,7 @@
 6. start logminer
   6.1 ./start-logminer.sh
 7. start health-check
-  7.1 ./start-healthcheck.sh   
+  7.1 ./start-healthcheck-ebao.sh   
 
 Deployment
 1. enable supplemental log & create logminer user
@@ -25,15 +28,10 @@ Deployment
 2. new DB objects
 	1.1	logon as tglminer and create stored procedure 'LOGMINER_NOARCHIVE_SP'
 		file: LOGMINER_NOARCHIVE_SP.sql
-	1.2 new table TGLMINER.T_STREAMING-ETL-HEALTH_CDC
-		1.2.1	create table T_STREAMING_ETL_HEALTH_CDC
-			(
-				cdc_time NUMBER(19, 0),
-				primary key (cdc_time)
-			);
-	 
+	1.2 new table TGLMINER.T_LOGMINER_SCN
+		
 		1.2.2	
-			SQL> ALTER TABLE TGLMINER.T_STREAMING_ETL_HEALTH_CDC ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
+			SQL> ALTER TABLE TGLMINER.T_LOGMINER_SCN ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
 		
 3. # To add supplementa logging
 	## 至少supplemental_log_data_min is enabled
@@ -81,18 +79,6 @@ Deployment
 	
 		# topic name
 		ebao.cdc.[tablename].0
-		
-		# topics for tglminer
-		ebao.cdc.t_streaming_etl_health.0
-		
-		# topics for PCR420669 
-		ebao.cdc.t_policy_holder.0
-		ebao.cdc.t_insured_list.0
-		ebao.cdc.t_contract_bene.0
-		ebao.cdc.t_policy_holder_log.0
-		ebao.cdc.t_insured_list_log.0
-		ebao.cdc.t_contract_bene_log.0
-		ebao.cdc.t_address.0
 	
 	#delete topic
 		./bin/kafka-topics.sh --delete --bootstrap-server localhost:9092  --topic [topic name]
