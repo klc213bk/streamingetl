@@ -3,11 +3,11 @@
 1. copy ojdbc8-12.2.0.1.jar, jsqlparser-1.2 to {kafka installation}/libs
 
 #initialization
-1. 
+1. start kafka server
   1.1 ./start-kafka-zookeeper.sh
   1.2 ./start-kafka-server.sh
 
-2. create logminer table
+2. create logminer table and create kafka topics
 $start-init-streaming.sh 
 
 
