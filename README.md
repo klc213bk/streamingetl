@@ -8,7 +8,10 @@
   1.2 ./start-kafka-server.sh
 
 2. create logminer table and create kafka topics
-$start-init-streaming.sh 
+$ ./start-init-streaming.sh 
+
+3. After project's logminer is started. Can start HealthCheckApp (optional)
+$ ./start-healthcheck-ebao.sh
 
 
 Note:
