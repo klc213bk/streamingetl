@@ -52,8 +52,6 @@ Deployment
 		file: LOGMINER_NOARCHIVE_SP.sql
 	1.2 new table TGLMINER.T_LOGMINER_SCN
 		
-		1.2.2	
-			SQL> ALTER TABLE TGLMINER.T_LOGMINER_SCN ADD SUPPLEMENTAL LOG DATA(ALL) COLUMNS;
 		
 3. # To add supplementa logging
 	## 至少supplemental_log_data_min is enabled
