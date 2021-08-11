@@ -10,9 +10,11 @@
 2. create logminer table and create kafka topics
 $ ./start-init-streaming.sh 
 
-3. After project's logminer is started. Can start HealthCheckApp (optional)
-$ ./start-healthcheck-ebao.sh
+3. create logminer table and create kafka topics
+$ ./start-init-streaming.sh 
 
+3. scheduling tasks such as housekeeping
+$ ./start-scheduling-tasks.sh 
 
 Note:
 # list topic
